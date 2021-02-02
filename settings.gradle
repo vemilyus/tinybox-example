@@ -1,0 +1,13 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name='tinybox'
+
+include 'tinybox-auth',
+        'tinybox-storage',
+        'tinybox-sharing',
+        'tinybox-gateway'

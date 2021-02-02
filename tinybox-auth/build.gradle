@@ -1,0 +1,5 @@
+apply from: '../config/gradle/service.gradle'
+
+dependencies {
+    implementation 'io.quarkus:quarkus-security-jpa'
+}
