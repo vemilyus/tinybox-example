@@ -37,9 +37,11 @@ subprojects {
     }
 
     allOpen {
-        annotation("javax.ws.rs.Path")
-        annotation("javax.enterprise.context.ApplicationScoped")
-        annotation("io.quarkus.test.junit.QuarkusTest")
+        annotation('javax.enterprise.context.ApplicationScoped')
+        annotation('javax.inject.Singleton')
+        annotation('javax.persistence.Entity')
+        annotation('javax.ws.rs.Path')
+        annotation('io.quarkus.test.junit.QuarkusTest')
     }
 
     repositories {
@@ -51,16 +53,16 @@ subprojects {
         implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
 
         implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-        implementation 'io.quarkus:quarkus-kotlin'
-        implementation 'io.quarkus:quarkus-arc'
         implementation 'org.apache.camel.quarkus:camel-quarkus-kotlin'
+        implementation 'io.quarkus:quarkus-kotlin'
 
-        implementation 'io.quarkus:quarkus-smallrye-openapi'
-        implementation 'io.quarkus:quarkus-smallrye-jwt'
-        implementation 'io.quarkus:quarkus-smallrye-jwt-build'
+        implementation 'io.quarkus:quarkus-arc'
         implementation 'io.quarkus:quarkus-kubernetes-client'
         implementation 'io.quarkus:quarkus-kubernetes-config'
         implementation 'io.quarkus:quarkus-resteasy'
+        implementation 'io.quarkus:quarkus-smallrye-openapi'
+        implementation 'io.quarkus:quarkus-smallrye-jwt'
+        implementation 'io.quarkus:quarkus-smallrye-jwt-build'
 
         testImplementation 'io.quarkus:quarkus-junit5'
         testImplementation 'io.rest-assured:rest-assured'

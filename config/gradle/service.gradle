@@ -1,7 +1,7 @@
 dependencies {
-    implementation 'io.quarkus:quarkus-hibernate-orm'
-    implementation 'org.apache.camel.quarkus:camel-quarkus-vertx-kafka'
-    implementation 'io.quarkus:quarkus-smallrye-openapi'
-    implementation 'io.quarkus:quarkus-resteasy-jackson'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'io.quarkus:quarkus-hibernate-orm-panache-kotlin'
+    implementation 'io.quarkus:quarkus-jdbc-postgresql'
+    implementation 'io.quarkus:quarkus-resteasy-jackson'
+    implementation 'org.apache.camel.quarkus:camel-quarkus-vertx-kafka'
 }
