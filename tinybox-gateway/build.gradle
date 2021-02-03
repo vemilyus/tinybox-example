@@ -1,4 +1,3 @@
 dependencies {
-    implementation 'org.apache.camel.quarkus:camel-quarkus-kubernetes'
     implementation 'org.apache.camel.quarkus:camel-quarkus-netty-http'
 }

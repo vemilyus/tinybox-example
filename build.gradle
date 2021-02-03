@@ -58,6 +58,7 @@ subprojects {
         implementation 'io.quarkus:quarkus-smallrye-openapi'
         implementation 'io.quarkus:quarkus-smallrye-jwt'
         implementation 'io.quarkus:quarkus-smallrye-jwt-build'
+        implementation 'io.quarkus:quarkus-kubernetes-client'
         implementation 'io.quarkus:quarkus-kubernetes-config'
         implementation 'io.quarkus:quarkus-resteasy'
 
