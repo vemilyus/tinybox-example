@@ -1,4 +1,4 @@
-package tinybox.auth
+package tinybox.auth.resources
 
 import io.quarkus.security.credential.PasswordCredential
 import io.quarkus.security.identity.IdentityProviderManager

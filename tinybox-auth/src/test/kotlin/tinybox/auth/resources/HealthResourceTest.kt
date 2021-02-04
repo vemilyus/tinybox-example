@@ -1,11 +1,10 @@
-package tinybox
+package tinybox.auth.resources
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.quarkus.test.junit.QuarkusTest
 import io.restassured.RestAssured.given
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.jupiter.api.Test
-import tinybox.auth.HealthResource
 import javax.inject.Inject
 
 @QuarkusTest

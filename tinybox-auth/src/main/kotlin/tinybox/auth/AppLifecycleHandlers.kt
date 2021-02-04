@@ -1,24 +1,27 @@
 package tinybox.auth
 
 import io.quarkus.elytron.security.common.BcryptUtil
-import io.quarkus.runtime.Startup
+import io.quarkus.runtime.StartupEvent
 import org.slf4j.LoggerFactory
 import tinybox.auth.entity.Role
 import tinybox.auth.entity.User
+import tinybox.auth.utils.Constants
 import tinybox.auth.utils.toHex
 import java.security.SecureRandom
-import javax.annotation.PostConstruct
 import javax.enterprise.context.ApplicationScoped
+import javax.enterprise.event.Observes
 import javax.transaction.Transactional
 
-@Startup
 @ApplicationScoped
-class InitRolesAndAdminUser {
-    private val log = LoggerFactory.getLogger(InitRolesAndAdminUser::class.java)!!
+class AppLifecycleHandlers {
+    private val log = LoggerFactory.getLogger(AppLifecycleHandlers::class.java)!!
 
-    @PostConstruct
     @Transactional
-    fun startup() {
+    fun onStart(@Observes event: StartupEvent) {
+        initRolesAndAdminUser()
+    }
+
+    private fun initRolesAndAdminUser() {
         val adminRole = createRoleIfNotExists(Constants.ROLE_ADMIN)
         val userRole = createRoleIfNotExists(Constants.ROLE_USER)
 

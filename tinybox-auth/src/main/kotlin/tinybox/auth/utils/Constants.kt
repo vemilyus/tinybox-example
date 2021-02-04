@@ -1,4 +1,4 @@
-package tinybox.auth
+package tinybox.auth.utils
 
 object Constants {
     const val ROLE_ADMIN = "admin"

@@ -1,4 +1,4 @@
-package tinybox.auth
+package tinybox.auth.resources
 
 import javax.annotation.security.PermitAll
 import javax.ws.rs.GET
