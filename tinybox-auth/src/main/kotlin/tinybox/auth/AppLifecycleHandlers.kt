@@ -5,9 +5,10 @@ import io.quarkus.runtime.StartupEvent
 import org.slf4j.LoggerFactory
 import tinybox.auth.entity.Role
 import tinybox.auth.entity.User
-import tinybox.auth.utils.Constants
-import tinybox.auth.utils.toHex
-import java.security.SecureRandom
+import tinybox.common.utils.Constants.Roles.ROLE_ADMIN
+import tinybox.common.utils.Constants.Roles.ROLE_API
+import tinybox.common.utils.Constants.Roles.ROLE_USER
+import tinybox.common.utils.generateRandomString
 import javax.enterprise.context.ApplicationScoped
 import javax.enterprise.event.Observes
 import javax.transaction.Transactional
@@ -22,15 +23,13 @@ class AppLifecycleHandlers {
     }
 
     private fun initRolesAndAdminUser() {
-        val adminRole = createRoleIfNotExists(Constants.ROLE_ADMIN)
-        val userRole = createRoleIfNotExists(Constants.ROLE_USER)
+        createRoleIfNotExists(ROLE_API)
+
+        val adminRole = createRoleIfNotExists(ROLE_ADMIN)
+        val userRole = createRoleIfNotExists(ROLE_USER)
 
         if (User.findByUsername("admin") == null) {
-            val random = SecureRandom.getInstanceStrong()
-            val passwordBytes = ByteArray(16)
-            random.nextBytes(passwordBytes)
-
-            val password = passwordBytes.toHex()
+            val password = generateRandomString()
 
             val adminUser = User("admin", BcryptUtil.bcryptHash(password))
             adminUser.roles = listOf(adminRole, userRole)

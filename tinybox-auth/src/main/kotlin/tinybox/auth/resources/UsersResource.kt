@@ -5,9 +5,10 @@ import org.jboss.resteasy.annotations.jaxrs.PathParam
 import tinybox.auth.entity.Role
 import tinybox.auth.entity.User
 import tinybox.auth.utils.Constants.EMAIL_LENGTH
-import tinybox.auth.utils.Constants.ROLE_ADMIN
-import tinybox.auth.utils.Constants.ROLE_USER
 import tinybox.auth.utils.Constants.USERNAME_LENGTH
+import tinybox.common.utils.Constants.Roles.ROLE_ADMIN
+import tinybox.common.utils.Constants.Roles.ROLE_API
+import tinybox.common.utils.Constants.Roles.ROLE_USER
 import javax.annotation.security.PermitAll
 import javax.annotation.security.RolesAllowed
 import javax.transaction.Transactional
@@ -27,6 +28,12 @@ class UsersResource {
     @RolesAllowed(ROLE_ADMIN)
     fun getUsersList(): List<User> =
         User.listAllSortedByUsername()
+
+    @GET
+    @Path("/names")
+    @RolesAllowed(ROLE_API)
+    fun getUsersNames(): List<String> =
+        User.listAllSortedByUsername().map { it.username }
 
     @GET
     @Path("/me")
