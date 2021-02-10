@@ -11,7 +11,7 @@ import tinybox.auth.utils.Constants.USERNAME_LENGTH
 import javax.persistence.*
 
 @Entity
-@Table(name = "tb_user", schema = "auth")
+@Table(name = "tb_user")
 @UserDefinition
 @JsonIgnoreProperties("id")
 class User : PanacheEntity() {
@@ -50,7 +50,7 @@ class User : PanacheEntity() {
 }
 
 @Entity
-@Table(name = "tb_role", schema = "auth")
+@Table(name = "tb_role")
 @JsonIgnoreProperties("id")
 class Role : PanacheEntity() {
     companion object : PanacheCompanion<Role> {
