@@ -1,14 +1,18 @@
 package tinybox.auth.resources
 
 import io.quarkus.elytron.security.common.BcryptUtil
+import org.eclipse.microprofile.reactive.messaging.Channel
+import org.eclipse.microprofile.reactive.messaging.Emitter
 import org.jboss.resteasy.annotations.jaxrs.PathParam
 import tinybox.auth.entity.Role
 import tinybox.auth.entity.User
 import tinybox.auth.utils.Constants.EMAIL_LENGTH
 import tinybox.auth.utils.Constants.USERNAME_LENGTH
+import tinybox.common.messages.UserDeleted
 import tinybox.common.utils.Constants.Roles.ROLE_ADMIN
 import tinybox.common.utils.Constants.Roles.ROLE_API
 import tinybox.common.utils.Constants.Roles.ROLE_USER
+import java.util.concurrent.CompletableFuture
 import javax.annotation.security.PermitAll
 import javax.annotation.security.RolesAllowed
 import javax.transaction.Transactional
@@ -21,7 +25,10 @@ import javax.ws.rs.core.SecurityContext
 @Path("/api/users")
 @Consumes(APPLICATION_JSON)
 @Produces(APPLICATION_JSON)
-class UsersResource {
+class UsersResource(
+    @Channel("user-deleted")
+    private val userDeleted: Emitter<UserDeleted>
+) {
     private val emailRegex = Regex("""^[^.@\s]+(?:\.[^.@\s]+)*@(?:[^.@\s]+\.)+[^.@\s]+$""")
 
     @GET
@@ -112,22 +119,23 @@ class UsersResource {
     @DELETE
     @Path("/me")
     @RolesAllowed(ROLE_USER)
-    fun deleteCurrentUser(@Context securityContext: SecurityContext): Response {
+    @Transactional
+    fun deleteCurrentUser(@Context securityContext: SecurityContext): CompletableFuture<Response> {
         val user = User.findByUsername(securityContext.userPrincipal.name)
             ?: throw NotFoundException()
 
-        deleteUser(user)
-
-        return Response.noContent().build()
+        return deleteUser(user)
+            .thenApply { Response.noContent().build() }
     }
 
     @DELETE
     @Path("/{username}")
     @RolesAllowed(ROLE_ADMIN)
+    @Transactional
     fun deleteUser(
         @PathParam username: String,
         @Context securityContext: SecurityContext
-    ): Response {
+    ): CompletableFuture<Response> {
         val user = User.findByUsername(username)
             ?: throw NotFoundException()
 
@@ -137,15 +145,17 @@ class UsersResource {
         )
             throw BadRequestException("admin cannot delete themselves")
 
-        deleteUser(user)
-
-        return Response.noContent().build()
+        return deleteUser(user)
+            .thenApply { Response.noContent().build() }
     }
 
-    private fun deleteUser(user: User) {
+    private fun deleteUser(user: User): CompletableFuture<Unit> {
         user.delete()
 
-        // TODO: publish deletion via Kafka
+        return userDeleted
+            .send(UserDeleted(user.username))
+            .toCompletableFuture()
+            .thenApply { }
     }
 
     data class CreateUserRequest(
